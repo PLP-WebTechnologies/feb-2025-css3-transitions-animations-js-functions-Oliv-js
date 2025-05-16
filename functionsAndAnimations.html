@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced DOM Interactions</title>
+    <style>
+        :root {
+            --primary-color: #2196f3;
+            --transition-time: 0.3s;
+        }
+
+        body {
+            transition: background-color var(--transition-time) ease;
+        }
+
+        .animated-box {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-color);
+            margin: 20px;
+            transition: transform var(--transition-time) ease;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spin-animation {
+            animation: spin 1s linear;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: 
+                background-color var(--transition-time) ease,
+                transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .dark-mode .animated-box {
+            background-color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Interactive Demo</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Animation Control</h2>
+            <div class="animated-box" id="targetBox"></div>
+            <button onclick="triggerAnimation()">Spin Box</button>
+            <button onclick="toggleTheme()">Toggle Dark Mode</button>
+        </section>
+
+        <section>
+            <h2>Preferences</h2>
+            <div>
+                <label>
+                    <input type="checkbox" id="motionToggle"> 
+                    Enable Animations
+                </label>
+            </div>
+        </section>
+    </main>
+
+    <script>
+      // Initialize on load
+window.addEventListener('load', () => {
+    // Load saved preferences
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    const animationsEnabled = localStorage.getItem('animationsEnabled') !== 'false';
+    
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    document.getElementById('motionToggle').checked = animationsEnabled;
+});
+
+// Animation trigger with localStorage
+function triggerAnimation() {
+    const box = document.getElementById('targetBox');
+    const animationsEnabled = document.getElementById('motionToggle').checked;
+    
+    if (animationsEnabled) {
+        box.classList.add('spin-animation');
+        setTimeout(() => {
+            box.classList.remove('spin-animation');
+        }, 1000);
+    }
+}
+
+// Theme management
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+
+// Animation preference storage
+document.getElementById('motionToggle').addEventListener('change', (e) => {
+    localStorage.setItem('animationsEnabled', e.target.checked);
+});
+    </script>
+</body>
+</html>
